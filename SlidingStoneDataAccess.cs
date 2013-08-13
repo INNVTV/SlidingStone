@@ -28,25 +28,37 @@ namespace SlidingStone
             CloudTableClient cloudTableClient = _storageAccount.CreateCloudTableClient();
 
             //Create tables to store entities by designated values:
+            /** */
             CloudTable table_ip = cloudTableClient.GetTableReference(logItem.LogType.ToString().ToLower() + "" + "byip");
             CloudTable table_activity = cloudTableClient.GetTableReference(logItem.LogType.ToString().ToLower() + "" + "byactivity");
             CloudTable table_time = cloudTableClient.GetTableReference(logItem.LogType.ToString().ToLower() + "" + "bytime");
+            //CloudTable table_user = cloudTableClient.GetTableReference(logItem.LogType.ToString().ToLower() + "" + "byuser");
+            //CloudTable table_company = cloudTableClient.GetTableReference(logItem.LogType.ToString().ToLower() + "" + "bycompany");
+             
 
             //Create an instance of each entity type
-            LogTableEntity_IPAddress logTableEntity_IPAddress = new LogTableEntity_IPAddress();
+            LogTableEntity_IPAddress logTableEntity_IPAddress = new LogTableEntity_IPAddress(); //cloudTableClient, logItem.LogType.ToString().ToLower() + "" + "byip");
             LogTableEntity_Activity logTableEntity_Activity = new LogTableEntity_Activity();
             LogTableEntity_Time logTableEntity_Time = new LogTableEntity_Time();
+            //LogTableEntity_UserName logTableEntity_UserName = new LogTableEntity_UserName();
+            //LogTableEntity_Company logTableEntity_Company = new LogTableEntity_Company();
 
+            /** */
             //Assign a corresponding CloudTable to each LogTableEntity for insert operations
             logTableEntity_IPAddress.cloudTable = table_ip;
             logTableEntity_Activity.cloudTable = table_activity;
             logTableEntity_Time.cloudTable = table_time;
+            //logTableEntity_UserName.cloudTable = table_user;
+            //logTableEntity_Company.cloudTable = table_company;
+             
 
             //Add each logtype into
             List<Object> entityTypes = new List<object>();
             entityTypes.Add(logTableEntity_IPAddress);
             entityTypes.Add(logTableEntity_Activity);
             entityTypes.Add(logTableEntity_Time);
+            //entityTypes.Add(logTableEntity_UserName);
+            //entityTypes.Add(logTableEntity_Company);
 
             List<Task> tasks = new List<Task>();
             foreach (ILogTableEntity obj in entityTypes)

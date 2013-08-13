@@ -5,7 +5,11 @@ A C# asynchronous & Parallel C# class library for logging application activities
 
 *Requires:* Azure Table Service.
 
-####Logging Examples:
+
+Examples
+============
+
+####Generate Logs:
 
     CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName={YourAccountName};AccountKey={YourAccountKey}");
 
@@ -21,3 +25,10 @@ A C# asynchronous & Parallel C# class library for logging application activities
     logItem.Description = "Example log";
 
     await slidingStoneDataAccess.LogAsync(logItem);
+
+
+####Get Logs:
+
+    CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName={YourAccountName};AccountKey={YourAccountKey}");
+
+    SlidingStone.SlidingStoneDataAccess slidingStoneDataAccess = new SlidingStone.SlidingStoneDataAccess(storageAccount);
