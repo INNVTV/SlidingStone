@@ -35,12 +35,12 @@ namespace SlidingStone.TableEntities
     /// </summary>
     abstract class LogTableEntity : TableEntity, ILogTableEntity
     {
-        //public LogTableEntity(CloudTableClient cloudTableClient, string tableName)
-        //{
-        //    //Create the cloudtable instance and  name for the entity operate against:
-        //    cloudTable = cloudTableClient.GetTableReference(tableName);
-        //    cloudTable.CreateIfNotExists();
-        //}
+        public LogTableEntity(CloudTableClient cloudTableClient, string tableName)
+        {
+            //Create the cloudtable instance and  name for the entity operate against:
+            cloudTable = cloudTableClient.GetTableReference(tableName);
+            cloudTable.CreateIfNotExists();
+        }
 
         // Abstract properties (properties that are used for partition keys on LogTableEntity_ types)
         public abstract string IPAddress { get; set; }
@@ -64,7 +64,8 @@ namespace SlidingStone.TableEntities
 
     internal class LogTableEntity_IPAddress : LogTableEntity
     {
-        public LogTableEntity_IPAddress()
+        public LogTableEntity_IPAddress(CloudTableClient cloudTableClient, string tableName)
+            : base(cloudTableClient, tableName)
         {
             RowKey = string.Format("{0:d19}+{1}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks, Guid.NewGuid().ToString("N"));
         }
@@ -85,7 +86,8 @@ namespace SlidingStone.TableEntities
 
     internal class LogTableEntity_Activity : LogTableEntity
     {
-        public LogTableEntity_Activity()
+        public LogTableEntity_Activity(CloudTableClient cloudTableClient, string tableName)
+            : base(cloudTableClient, tableName)
         {
             RowKey = string.Format("{0:d19}+{1}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks, Guid.NewGuid().ToString("N"));
         }
@@ -106,7 +108,8 @@ namespace SlidingStone.TableEntities
 
     internal class LogTableEntity_Time : LogTableEntity
     {
-        public LogTableEntity_Time()
+        public LogTableEntity_Time(CloudTableClient cloudTableClient, string tableName)
+            : base(cloudTableClient, tableName)
         {
             PartitionKey = string.Format("{0:d19}+{1}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks, Guid.NewGuid().ToString("N"));
         }
