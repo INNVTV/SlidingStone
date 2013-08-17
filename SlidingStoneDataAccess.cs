@@ -52,7 +52,7 @@ namespace SlidingStone
                     
                     #region Trace Statements
 
-                    //Display the id of the thread for each parallel instance
+                    //Display the id of the thread for each parallel instance to verifiy prallelism
                     //Trace.TraceInformation("Current thread ID: " + Thread.CurrentThread.ManagedThreadId);
 
                     #endregion
