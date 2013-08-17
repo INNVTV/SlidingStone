@@ -26,9 +26,3 @@ Examples
 
     await slidingStoneDataAccess.LogAsync(logItem);
 
-
-####Get Logs:
-
-    CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName={YourAccountName};AccountKey={YourAccountKey}");
-
-    SlidingStone.SlidingStoneDataAccess slidingStoneDataAccess = new SlidingStone.SlidingStoneDataAccess(storageAccount);
