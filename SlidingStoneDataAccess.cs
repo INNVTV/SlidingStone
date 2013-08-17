@@ -4,8 +4,10 @@ using SlidingStone.Models;
 using SlidingStone.TableEntities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SlidingStone
@@ -42,7 +44,8 @@ namespace SlidingStone
             //entityTypes.Add(logTableEntity_UserName);
             //entityTypes.Add(logTableEntity_Company);
 
-            List<Task> tasks = new List<Task>();
+            //List<Task> tasks = new List<Task>();
+            /*
             foreach (ILogTableEntity obj in entityTypes)
             {
                 //Transform the LogItem into each corresponding table entity type for insert execution into logs
@@ -60,12 +63,53 @@ namespace SlidingStone
                 //create an insert operation for each entity, assign to designated CloudTable, and add to our list of tasks:
                 TableOperation operation = TableOperation.Insert((obj as TableEntity));           
                 tasks.Add(Task.Factory.StartNew(() => obj.cloudTable.Execute(operation)));
-            }
+                //tasks.Add(Task.Factory.StartNew(() => obj.cloudTable.Execute(operation), TaskCreationOptions.LongRunning));
+                ;
+            }*/
             
             try
             {
                 //Execute all tasks in parallel
-                Task.WaitAll(tasks.ToArray());
+                //Task.WaitAll(tasks.ToArray());
+
+                /*
+               foreach (ILogTableEntity obj in entityTypes)
+               {
+                   Trace.TraceInformation("Current thread ID: " + Thread.CurrentThread.ManagedThreadId);
+                 
+                   obj.Activity = logItem.ActivityType.ToString();
+                   obj.Company = logItem.Company;
+                   obj.Description = logItem.Description;
+                   obj.Email = logItem.Email;
+                   obj.IPAddress = logItem.IPAddress;
+                   obj.ObjectID = logItem.ObjectID;
+                   obj.UserName = logItem.UserName;
+                   obj.cloudTable.CreateIfNotExists();
+                   TableOperation operation = TableOperation.Insert((obj as TableEntity));
+                   obj.cloudTable.Execute(operation);
+               }*/
+                
+                Parallel.ForEach(entityTypes, obj =>
+                {
+
+                    Trace.TraceInformation("Current thread ID: " + Thread.CurrentThread.ManagedThreadId);
+
+                    //Transform the LogItem into each corresponding table entity type for insert execution into logs
+                    (obj as ILogTableEntity).Activity = logItem.ActivityType.ToString();
+                    (obj as ILogTableEntity).Company = logItem.Company;
+                    (obj as ILogTableEntity).Description = logItem.Description;
+                    (obj as ILogTableEntity).Email = logItem.Email;
+                    (obj as ILogTableEntity).IPAddress = logItem.IPAddress;
+                    (obj as ILogTableEntity).ObjectID = logItem.ObjectID;
+                    (obj as ILogTableEntity).UserName = logItem.UserName;
+
+                    //Create table for entity if not exists
+                    (obj as ILogTableEntity).cloudTable.CreateIfNotExists();
+
+                    //create an insert operation for each entity, assign to designated CloudTable, and add to our list of tasks:
+                    TableOperation operation = TableOperation.Insert((obj as TableEntity));
+                    (obj as ILogTableEntity).cloudTable.Execute(operation);
+                });
             }
             catch (Exception e)
             {
