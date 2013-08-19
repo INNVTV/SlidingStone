@@ -44,9 +44,49 @@ namespace SlidingStone
             //entityTypes.Add(logTableEntity_UserName);
             //entityTypes.Add(logTableEntity_Company);
 
+            #region Alternative method for parallelism using Tasks
+            /*
+            List<Task> tasks = new List<Task>();
+            
+            foreach (ILogTableEntity obj in entityTypes)
+            {
+                //Transform the LogItem into each corresponding table entity type for insert execution into logs
+                obj.Activity = logItem.ActivityType.ToString();
+                obj.Company = logItem.Company;
+                obj.Description = logItem.Description;
+                obj.Email = logItem.Email;
+                obj.IPAddress = logItem.IPAddress;
+                obj.ObjectID = logItem.ObjectID;
+                obj.UserName = logItem.UserName;
+
+                //Create table for entity if not exists
+                obj.cloudTable.CreateIfNotExists();
+
+                //create an insert operation for each entity, assign to designated CloudTable, and add to our list of tasks:
+                TableOperation operation = TableOperation.Insert((obj as TableEntity));           
+                tasks.Add(Task.Factory.StartNew(() =>
+                    {
+                        //Execute the operation
+                        obj.cloudTable.Execute(operation);
+
+                        //Display the id of the thread for each parallel instance to verifiy prallelism
+                        //Trace.TraceInformation("Current thread ID: " + Thread.CurrentThread.ManagedThreadId);
+
+                    }
+                    ));
+                ;
+            }*/
+            #endregion
+
             try
             {
-                
+                #region Alternative method for parallelism using Tasks
+                //Run all queued tasks in parallel (Remove Parallel.For loop below)
+                /*
+                Task.WaitAll(tasks.ToArray());
+                */
+                #endregion
+        
                 Parallel.ForEach(entityTypes, obj =>
                 {
                     
