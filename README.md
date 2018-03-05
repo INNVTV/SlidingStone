@@ -9,7 +9,7 @@ A C# asynchronous/Parallel class library for logging application activities _(er
 Examples
 ============
 
-####Generate Logs:
+### Generate Logs:
 
     CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName={YourAccountName};AccountKey={YourAccountKey}");
 
